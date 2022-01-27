@@ -12,28 +12,33 @@ export const useHttpClient = () => {
         headers = {}
     ) => {
         setIsLoading(true);
-        const httpAbortCrtll = new AbortController();
-        activeHttpRequests.current.push(httpAbortCrtll);
+        const httpAbortCrtl = new AbortController();
+        activeHttpRequests.current.push(httpAbortCrtl);
         
         try {
             const response = await fetch(url, {
                 method, 
                 body,
                 headers,
-                signal: httpAbortCrtll.signal
+                signal: httpAbortCrtl.signal
             });
         
             const responseData = await response.json();
         
+            activeHttpRequests.current = activeHttpRequests.current.filter(
+                reqCtrl => reqCtrl !== httpAbortCrtl
+            );
+            
             if (!response.ok) {
             throw new Error(responseData.message)
             }
+            setIsLoading(false);
             return responseData;
-
         } catch (err) {
             setError(err.message)
+            throw err;
         }
-        setIsLoading(false);
+
     }, []);
 
     const clearError = () => {
@@ -46,5 +51,5 @@ export const useHttpClient = () => {
         };
     },[])
 
-    return { isLoading, error, sendRequest}
+    return { isLoading, error, sendRequest, clearError}
 };
