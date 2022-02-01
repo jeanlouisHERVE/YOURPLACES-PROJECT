@@ -7,6 +7,7 @@ import Map from '../../shared/components/UIElements/Map';
 import { AuthContext } from '../../shared/context/auth-context';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import './PlaceItem.css';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const PlaceItem = props => {
   const {isLoading, error, sendRequest, clearError} = useHttpClient();
@@ -72,6 +73,7 @@ const PlaceItem = props => {
       </Modal>
       <li className="place-item">
         <Card className="place-item__content">
+          {isLoading && <LoadingSpinner/>}
           <div className="place-item__image">
             <img src={props.image} alt={props.title} />
           </div>
