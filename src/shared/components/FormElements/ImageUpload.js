@@ -19,6 +19,7 @@ const ImageUpload = props => {
             <input 
             type="file" 
             id={props.id} 
+            ref={filePickerRef}
             style={{display:"none"}} 
             accept=".jpg,.png,.jpeg" 
             onChange={pickedHandler}/>
